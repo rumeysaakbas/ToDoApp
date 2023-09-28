@@ -19,7 +19,7 @@
         <div class="row">
             <div class="input-group col-6">
                 <input type="text" class="form-control" placeholder="" aria-describedby="button-addon2" id="inputItem">
-                <button class="btn btn-success" type="button" id="save_button">Button</button>
+                <button class="btn btn-success" type="button" id="save_button" value="save">Kaydet</button>
             </div>
         </div>
         <div class="row mt-3">
@@ -39,40 +39,53 @@
     var taskContainer = document.getElementById('tasks_container');
     var inputItem = document.getElementById('inputItem');
 
-    saveButton.addEventListener("click", function(){
+    saveButton.addEventListener("click", function (){
+        if(inputItem.value === '') {}
+        else
+        {
+            const li = document.createElement("li");
+            li.className = 'toDoItem list-group-item'
 
-        var item = document.createElement('li');
-        item.className = 'list-group-item';
+            const p = document.createElement('p');
+            p.innerText = inputItem.value;
+            li.appendChild(p);
 
-        var textNode = document.createTextNode(inputItem.value);
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'deleteButton btn btn-danger btn-sm me-2 delete';
+            deleteButton.innerText = 'Sil';
+            deleteButton.addEventListener("click", deleteTask);
+            li.appendChild(deleteButton);
 
-        var edit_button = document.createElement('button');
-        edit_button.id = 'edit_btn';
-        edit_button.className = 'btn btn-secondary float-right ms-5 edit';
-        edit_button.textContent = 'Edit';
+            const completeButton = document.createElement('button');
+            completeButton.className = 'completeButton btn btn-secondary btn-sm me-2 complete';
+            completeButton.innerText = "Tamamlandı";
+            completeButton.addEventListener("click", completeTask);
+            li.appendChild(completeButton);
 
-        var delete_button = document.createElement('button');
-        delete_button.id = 'delete_btn';
-        delete_button.className = 'btn btn-danger float-right ms-2 delete';
-        delete_button.textContent = 'Delete';
-
-        item.appendChild(textNode);
-        item.appendChild(edit_button);
-        item.appendChild(delete_button);
-
-        taskContainer.appendChild(item);
-
-        inputItem.value = '';
-    });
-
-    taskContainer.addEventListener("click", function(event){
-        if (event.target.classList.contains('delete')) {
-            alert("Delete düğmesine tıklandı");
-            var li = event.target.closest('li');
-            li.remove();
+            taskContainer.appendChild(li);
+            inputItem.value = "";
+            inputItem.focus();
         }
     });
 
+    function completeTask(event){
+        var li = event.target.closest('li');
+        if(li.querySelector("p").classList.contains('completed'))
+        {
+            li.querySelector("p").classList.remove('text-decoration-line-through');
+            li.querySelector("p").classList.remove('completed');
+        }
+        else
+        {
+            li.querySelector("p").classList.add('text-decoration-line-through');
+            li.querySelector("p").classList.add('completed');
+        }
+    }
+
+    function deleteTask(event){
+        var li = event.target.closest('li');
+        li.remove();
+    }
 
 </script>
 
